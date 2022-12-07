@@ -18,10 +18,6 @@ if __name__ == "__main__":
         path = input("Paste here your chosen download path: ")
         dwn.set_default_path(path)
         print("Current path is ->  ", dwn.get_path())
-    elif opt == 4:
-        print(hand.check_folder_exists("D:\Video Downloads\Elton_John"))
-        hand.create_folder_dir("D:\Video Downloads\Elton_John")
-        print(hand.check_folder_exists("D:\Video Downloads\Elton_John"))
 
     else:
         print("Invalid option.")
