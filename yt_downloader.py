@@ -1,11 +1,10 @@
 from pytube import Playlist, YouTube
 import os
 
-save_path = "D:\Video Downloads"
-
+# Download funcs
 def downl_youtube(vid):
     print("Now downloading ---->  ", vid.title)
-    vid.streams.get_highest_resolution().download(output_path = save_path)
+    vid.streams.get_highest_resolution().download(output_path = get_path())
     print("Done ---->  ", vid.title)
 
 def download_vid(url):
@@ -17,6 +16,7 @@ def download_plist(url):
     for vid in plist:
         downl_youtube(vid)
 
+# PATH funcs
 def set_default_path(pathName):
     if os.path.exists(pathName) == False:
         pathName = os.getcwd()
