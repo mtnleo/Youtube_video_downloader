@@ -1,8 +1,10 @@
 from pytube import Playlist, YouTube, Channel
 import folder_handling as fld
 import os
+import subprocess
 
 # Download funcs
+# Dash streams
 def get_dash_streams(vid):
     adaptiveVid = list(vid.streams.filter(adaptive=True, type="video"))
     adaptiveAud = list(vid.streams.filter(adaptive=True, type="audio"))
@@ -13,10 +15,25 @@ def download_dash_streams(vid):
     dash_vid, dash_aud = get_dash_streams(vid)
     channel = Channel(vid.channel_url)
 
-    dash_vid.download(output_path = get_artist_path(channel.channel_name))
-    dash_aud.download(output_path = get_artist_path(channel.channel_name))
+    artist_path = get_artist_path(channel.channel_name)
+
+    conv_path = get_path()
+    conv_path = fld.get_converter_folder(conv_path)
+
+    dash_vid.download(output_path = conv_path)
+    dash_aud.download(output_path = conv_path)
+
+    files_list = os.listdir(conv_path)
+    new_file_name = files_list[0][:-4] + "_c.mp4"
+    print("LLEGA")
+
+    cd = f"cd {conv_path}"
+    command = f"ffmpeg -i {files_list[0]} -i {files_list[1]} -c:v copy -c:a aac {new_file_name}"
+    subprocess.call(cd, shell=True)
+    subprocess.call(command, shell=True)
 
 
+# get path
 def get_artist_path(name):
     path = get_path()
     artist_folder = fld.create_folder_name(name)
@@ -26,6 +43,8 @@ def get_artist_path(name):
         fld.create_folder_dir(new_path)
         
     return new_path
+
+# progressive video
 
 def downl_youtube(vid):
     print("Now downloading ---->  ", vid.title)
