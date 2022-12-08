@@ -3,6 +3,20 @@ import folder_handling as fld
 import os
 
 # Download funcs
+def get_dash_streams(vid):
+    adaptiveVid = list(vid.streams.filter(adaptive=True, type="video"))
+    adaptiveAud = list(vid.streams.filter(adaptive=True, type="audio"))
+
+    return adaptiveVid[0], adaptiveAud[-1]
+
+def download_dash_streams(vid):
+    dash_vid, dash_aud = get_dash_streams(vid)
+    channel = Channel(vid.channel_url)
+
+    dash_vid.download(output_path = get_artist_path(channel.channel_name))
+    dash_aud.download(output_path = get_artist_path(channel.channel_name))
+
+
 def get_artist_path(name):
     path = get_path()
     artist_folder = fld.create_folder_name(name)
@@ -28,7 +42,7 @@ def download_plist(url):
     for vid in plist:
         downl_youtube(vid)
 
-# PATH funcs
+# Path funcs
 def set_default_path(pathName):
     if os.path.exists(pathName) == False:
         pathName = os.getcwd()
@@ -46,3 +60,4 @@ def get_path():
         path = os.getcwd()
 
     return path
+

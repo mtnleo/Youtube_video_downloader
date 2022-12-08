@@ -1,5 +1,4 @@
 import yt_downloader as dwn
-import folder_handling as hand
 
 if __name__ == "__main__":
     print("| 1 | Download a video")
@@ -18,6 +17,10 @@ if __name__ == "__main__":
         path = input("Paste here your chosen download path: ")
         dwn.set_default_path(path)
         print("Current path is ->  ", dwn.get_path())
+    elif opt == 4:
+        url = input("Paste the URL of your playlist: ")
+        vid = dwn.YouTube(url)
+        dwn.download_dash_streams(vid)
 
     else:
         print("Invalid option.")
