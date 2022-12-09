@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 create_folder_name = lambda name: name.replace(" ", "_")
 
@@ -17,3 +18,9 @@ def get_converter_folder(path):
         os.mkdir(new_path)
 
     return new_path
+
+def change_file_name(old_path, new_path):
+    old_P = Path(old_path)
+    target = Path(new_path)
+
+    old_P.rename(target)

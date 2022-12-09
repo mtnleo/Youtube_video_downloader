@@ -24,12 +24,31 @@ def download_dash_streams(vid):
     dash_aud.download(output_path = conv_path)
 
     files_list = os.listdir(conv_path)
-    new_file_name = files_list[0][:-4] + "_c.mp4"
-    print("LLEGA")
+    no_spaces_file_list = [name.replace(" ", "_") for name in files_list]
 
+    files_list_path = [conv_path + f"\\{name}" for name in files_list]
+    no_spaces_file_list_path = [conv_path + f"\\{name}" for name in no_spaces_file_list]
+    
+    for name1, name2 in zip(files_list_path, no_spaces_file_list_path):
+        fld.change_file_name(name1, name2)
+
+    new_file_name = files_list[0][:-4] + "_c.mp4"
+
+    #command = f"ffmpeg -i {no_spaces_file_list[0]} -i {no_spaces_file_list[1]} -c:v copy -c:a aac {new_file_name}"
+    command = ["ffmpeg", "-i", no_spaces_file_list[0], "-i", no_spaces_file_list[1], "-c:v", "copy", "-c:a", "aac", new_file_name]
+    """
     cd = f"cd {conv_path}"
-    command = f"ffmpeg -i {files_list[0]} -i {files_list[1]} -c:v copy -c:a aac {new_file_name}"
     subprocess.call(cd, shell=True)
+    
+    cwd = os.getcwd()
+    if cwd[0] != conv_path[0]:
+        print("ENTRA AL IF")
+        new_call = conv_path[:2]
+        subprocess.call(new_call, shell=True)
+    """
+    os.chdir(conv_path)
+
+    subprocess.call("dir", shell=True)
     subprocess.call(command, shell=True)
 
 
