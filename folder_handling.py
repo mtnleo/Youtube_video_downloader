@@ -24,3 +24,7 @@ def change_file_name(old_path, new_path):
     target = Path(new_path)
 
     old_P.rename(target)
+
+def delete_directory_files(dir_list):
+    for file_path in dir_list:
+        os.remove(file_path)

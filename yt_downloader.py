@@ -33,23 +33,20 @@ def download_dash_streams(vid):
         fld.change_file_name(name1, name2)
 
     new_file_name = files_list[0][:-4] + "_c.mp4"
+    new_file_path = os.path.join(conv_path, new_file_name)
+    artist_file_path = os.path.join(artist_path, new_file_name)
 
-    #command = f"ffmpeg -i {no_spaces_file_list[0]} -i {no_spaces_file_list[1]} -c:v copy -c:a aac {new_file_name}"
-    command = ["ffmpeg", "-i", no_spaces_file_list[0], "-i", no_spaces_file_list[1], "-c:v", "copy", "-c:a", "aac", new_file_name]
-    """
-    cd = f"cd {conv_path}"
-    subprocess.call(cd, shell=True)
-    
-    cwd = os.getcwd()
-    if cwd[0] != conv_path[0]:
-        print("ENTRA AL IF")
-        new_call = conv_path[:2]
-        subprocess.call(new_call, shell=True)
-    """
+    # change directory and download
     os.chdir(conv_path)
-
-    subprocess.call("dir", shell=True)
+    command = ["ffmpeg", "-i", no_spaces_file_list[0], "-i", no_spaces_file_list[1], "-c:v", "copy", "-c:a", "aac", new_file_name]
     subprocess.call(command, shell=True)
+
+    # I still need to add the delete the conv folder and move
+    # the merged video to the artist's folder
+    #move the new video to the artist's folder
+    os.replace(new_file_path, artist_file_path)
+
+    fld.delete_directory_files(no_spaces_file_list_path)
 
 
 # get path
