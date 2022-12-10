@@ -41,11 +41,10 @@ def download_dash_streams(vid):
     command = ["ffmpeg", "-i", no_spaces_file_list[0], "-i", no_spaces_file_list[1], "-c:v", "copy", "-c:a", "aac", new_file_name]
     subprocess.call(command, shell=True)
 
-    # I still need to add the delete the conv folder and move
-    # the merged video to the artist's folder
     #move the new video to the artist's folder
     os.replace(new_file_path, artist_file_path)
 
+    # Delete the conversion folder files
     fld.delete_directory_files(no_spaces_file_list_path)
 
 
@@ -70,12 +69,16 @@ def downl_youtube(vid):
 
 def download_vid(url):
     vid = YouTube(url)
-    downl_youtube(vid)
+    download_dash_streams(vid)
+    os.system("cls")
+    print(f"Done downloading -----> |  {vid.title}  |")
 
 def download_plist(url):
     plist = Playlist(url)
-    for vid in plist:
-        downl_youtube(vid)
+    for vid in plist.videos:
+        download_dash_streams(vid)
+        os.system("cls")
+        print(f"Done downloading -----> |  {vid.title}  |")
 
 # Path funcs
 def set_default_path(pathName):

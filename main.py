@@ -17,13 +17,6 @@ if __name__ == "__main__":
         path = input("Paste here your chosen download path: ")
         dwn.set_default_path(path)
         print("Current path is ->  ", dwn.get_path())
-    elif opt == 4:
-        url = input("Paste the URL of your playlist: ")
-        vid = dwn.YouTube(url)
-        dwn.download_dash_streams(vid)
-    elif opt == 5:
-        path = input("PASTE PATH HERE: ")
-        dwn.fld.create_converter_folder(path)
 
     else:
         print("Invalid option.")
