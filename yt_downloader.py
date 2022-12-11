@@ -9,7 +9,12 @@ def get_dash_streams(vid):
     adaptiveVid = list(vid.streams.filter(adaptive=True, type="video"))
     adaptiveAud = list(vid.streams.filter(adaptive=True, type="audio"))
 
-    return adaptiveVid[0], adaptiveAud[-1]
+    for vid in adaptiveVid:
+        if "mp4" in str(vid):
+            returnVid = vid
+            break
+
+    return returnVid, adaptiveAud[-1]
 
 def download_dash_streams(vid):
     dash_vid, dash_aud = get_dash_streams(vid)
