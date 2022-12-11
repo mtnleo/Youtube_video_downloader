@@ -16,13 +16,13 @@ def get_dash_streams(vid):
 
     return returnVid, adaptiveAud[-1]
 
-def download_dash_streams(vid):
+def download_dash_streams(vid, CWD):
     dash_vid, dash_aud = get_dash_streams(vid)
     channel = Channel(vid.channel_url)
 
-    artist_path = get_artist_path(channel.channel_name)
+    artist_path = get_artist_path(channel.channel_name, CWD)
 
-    conv_path = get_path()
+    conv_path = get_path(CWD)
     conv_path = fld.get_converter_folder(conv_path)
 
     dash_vid.download(output_path = conv_path)
@@ -54,8 +54,8 @@ def download_dash_streams(vid):
 
 
 # get path
-def get_artist_path(name):
-    path = get_path()
+def get_artist_path(name, CWD):
+    path = get_path(CWD)
     artist_folder = fld.create_folder_name(name)
     new_path = fld.create_new_dir_path(path, artist_folder)
 
@@ -72,19 +72,29 @@ def downl_youtube(vid):
     vid.streams.get_highest_resolution().download(output_path = get_artist_path(channel.channel_name))
     print("Done ---->  ", vid.title)
 
-def download_vid(url):
-    vid = YouTube(url)
-    download_dash_streams(vid)
+def download_vid(url, CWD):
+    try:
+        vid = YouTube(url)
+    except:
+        print("That URL doesn't exist")
+        return False
+    
+    download_dash_streams(vid, CWD)
     os.system("cls")
-    print(f"Done downloading -----> |  {vid.title}  |")
+    print(f"Done downloading ----->   |  {vid.title}  |")
 
-def download_plist(url):
-    plist = Playlist(url)
+def download_plist(url, CWD):
+    try:
+        plist = Playlist(url)
+    except:
+        print("That URL doesn't exist")
+        return False
+    
     for vid in plist.videos:
-        download_dash_streams(vid)
+        download_dash_streams(vid, CWD)
         os.system("cls")
-        print(f"Done downloading -----> |  {vid.title}  |")
-
+        print(f"Done downloading ----->   |  {vid.title}  |")
+ 
 # Path funcs
 def set_default_path(pathName):
     if os.path.exists(pathName) == False:
@@ -94,13 +104,15 @@ def set_default_path(pathName):
     with open("path.txt", "w") as file:
         file.write(pathName)
 
-def get_path():
+def get_path(cwd):
     path = ""
+    os.chdir(cwd)
     try:
         with open("path.txt", "r") as file:
             path = file.readline()
     except:
         path = os.getcwd()
+        
 
     return path
 
