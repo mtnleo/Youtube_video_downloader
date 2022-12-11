@@ -23,7 +23,7 @@ if __name__ == "__main__":
         elif opt == 3:
             path = input("Paste here your chosen download path: ")
             dwn.set_default_path(path)
-            print("Current path is ->  ", dwn.get_path())
+            print("Current path is ->  ", dwn.get_path(CWD))
 
         else:
             print("Invalid option.")
