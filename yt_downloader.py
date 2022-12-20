@@ -5,6 +5,20 @@ import subprocess
 
 # Download funcs
 # Dash streams
+def get_video_dash_streams(vid):
+    adaptiveVid = list(vid.streams.filter(adaptive=True, type="video"))
+
+    for vid in adaptiveVid:
+        if "mp4" in str(vid):
+            returnVid = vid
+            break
+
+    return returnVid
+
+def get_audio_dash_streams(vid):
+    adaptiveAud = list(vid.streams.filter(adaptive=True, type="audio"))
+    return adaptiveAud[-1]
+
 def get_dash_streams(vid):
     adaptiveVid = list(vid.streams.filter(adaptive=True, type="video"))
     adaptiveAud = list(vid.streams.filter(adaptive=True, type="audio"))
@@ -15,6 +29,25 @@ def get_dash_streams(vid):
             break
 
     return returnVid, adaptiveAud[-1]
+
+def download_audio(url, CWD):
+    try:
+        vid = YouTube(url)
+    except:
+        print("That URL doesn't exist")
+        return False
+
+    adaptiveAud = get_audio_dash_streams(vid)
+    channel = Channel(vid.channel_url)
+
+    print("Now downloading ---->  ", vid.title)
+
+    artist_path = get_artist_path(channel.channel_name, CWD)
+
+    adaptiveAud.download(output_path = artist_path)
+
+    print("Done ---->  ", vid.title)
+
 
 def download_dash_streams(vid, CWD):
     dash_vid, dash_aud = get_dash_streams(vid)
